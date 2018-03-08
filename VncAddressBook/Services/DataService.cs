@@ -33,12 +33,20 @@ namespace VncAddressBook.Model
 
         public void SaveEntry(Entry entry)
         {
+            Config currentConfig = LoadConfig();
             try
             {
                 using (var stringWriter = new Utf8StringWriter())
                 {
                     stringWriter.WriteLine("[connection]");
-                    stringWriter.WriteLine("host=" + entry.Host);
+                    if (currentConfig.UsingRealVnc == true && entry.Port != "5900")
+                    {
+                        stringWriter.WriteLine("host=" + entry.Host + ":" + entry.Port);
+                    }
+                    else
+                    {
+                        stringWriter.WriteLine("host=" + entry.Host);
+                    }
                     stringWriter.WriteLine("port=" + entry.Port);
                     stringWriter.WriteLine("password=" + entry.Password);
                     stringWriter.WriteLine("[options]");
@@ -54,7 +62,7 @@ namespace VncAddressBook.Model
             }
             catch(Exception e)
             {
-                Console.WriteLine("Exception thrown: SaveEntry() failed.", e.ToString());
+                Console.WriteLine("Exception: SaveEntry() failed.", e.ToString());
             }
         }
 
@@ -144,7 +152,7 @@ namespace VncAddressBook.Model
         public void OpenVncViewer(Entry entry)
         {
             Config currentConfig = LoadConfig();
-            if (currentConfig.UsingVnc == "tightVnc")
+            if (currentConfig.UsingTightVnc == true)
             {
                 string tightVncPath = GetTightVncPath();
                 if (tightVncPath != "invalidpath")
@@ -160,7 +168,7 @@ namespace VncAddressBook.Model
                     MessageBoxResult result = MessageBox.Show(message, caption, buttons, MessageBoxImage.Error);
                 }
             }
-            else if (currentConfig.UsingVnc == "realVnc")
+            else if (currentConfig.UsingRealVnc == true)
             {
                 string realVncPath = GetRealVncPath();
                 if (realVncPath != "invalidpath")

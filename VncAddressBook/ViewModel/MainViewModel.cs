@@ -37,6 +37,7 @@ namespace VncAddressBook.ViewModel
             AddEntryCommand = new RelayCommand(AddEntry);
             EditEntryCommand = new RelayCommand(EditEntry, () => SelectedEntry != null);
             SaveEntryCommand = new RelayCommand(SaveEntry);
+            DeleteEntryCommand = new RelayCommand(DeleteEntry);
             ConnectCommand = new RelayCommand(() => { DataService.OpenVncViewer(SelectedEntry); }, () => SelectedEntry != null);
 
             GetDesignData();
@@ -197,6 +198,36 @@ namespace VncAddressBook.ViewModel
         }
 
         /// <summary>
+        /// The <see cref="DeleteEntryCommand" /> property's name.
+        /// </summary>
+        public const string DeleteEntryCommandPropertyName = "DeleteEntryCommand";
+
+        private ICommand _DeleteEntryCommand;
+
+        /// <summary>
+        /// Sets and gets the DeleteEntryCommand property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public ICommand DeleteEntryCommand
+        {
+            get
+            {
+                return _DeleteEntryCommand;
+            }
+
+            set
+            {
+                if (_DeleteEntryCommand == value)
+                {
+                    return;
+                }
+
+                _DeleteEntryCommand = value;
+                RaisePropertyChanged(DeleteEntryCommandPropertyName);
+            }
+        }
+
+        /// <summary>
         /// The <see cref="ConnectCommand" /> property's name.
         /// </summary>
         public const string ConnectCommandPropertyName = "ConnectCommand";
@@ -331,7 +362,7 @@ namespace VncAddressBook.ViewModel
             IsEditEntryVisible = false;
         }
 
-        private void RemoveEntry()
+        private void DeleteEntry()
         {
             if (SelectedEntry != null)
             {

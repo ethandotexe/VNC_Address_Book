@@ -12,6 +12,7 @@ namespace VncAddressBook.Model
         void SaveConfig(Config config);
         List<Entry> LoadEntries();
         void SaveEntry(Entry entry);
+        void DeleteEntry(Entry entry);
         void OpenVncViewer(Entry entry);
     }
 }

@@ -8,7 +8,7 @@ namespace VncAddressBook.Models
 {
     public class Config
     {
-        public string UsingVnc { get; set; } // "tightVnc" OR "realVnc"
-        public string OtherProperty { get; set; }
+        public bool UsingTightVnc { get; set; } = true;
+        public bool UsingRealVnc { get; set; } = false;
     }
 }
