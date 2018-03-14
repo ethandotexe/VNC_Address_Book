@@ -33,7 +33,7 @@
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <Button Content="Add" Command="{Binding AddEntryCommand}" />
             <Button Content="Edit" Margin="6,0,0,0" Command="{Binding EditEntryCommand}" />
-            <Button Content="Remove" Margin="6,0,0,0" />
+            <Button Content="Remove" Margin="6,0,0,0" Command="{Binding DeleteEntryCommand}" />
         </StackPanel>
 
         <ListBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Entries}" SelectedItem="{Binding SelectedEntry}" BorderBrush="{x:Null}">

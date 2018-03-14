@@ -366,6 +366,15 @@ namespace VncAddressBook.ViewModel
         {
             if (SelectedEntry != null)
             {
+                DataService.ShowMessageBox("Are you sure you want to delete this entry? This cannot be undone.", (x) => 
+                {
+                    if (x == true)
+                    {
+                        Entries.Remove(SelectedEntry);
+                        DataService.DeleteEntry(SelectedEntry);
+                    }
+                    
+                });
                 
             }
         }

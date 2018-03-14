@@ -14,6 +14,7 @@ namespace VncAddressBook.Model
 
         public void SaveConfig(Config currentConfig)
         {
+            VerifyProgramDirectoriesExist();
             using (var stringWriter = new Utf8StringWriter())
             {
                 string json = JsonConvert.SerializeObject(currentConfig);
@@ -25,14 +26,20 @@ namespace VncAddressBook.Model
         
         public Config LoadConfig()
         {
+            VerifyProgramDirectoriesExist();
             string configFile = vncEntriesPath + @"\Configuration\ProgramConfig.config";
+            if (File.Exists(configFile) == false)
+            {
+                Config defaultConfig = new Config();
+                SaveConfig(defaultConfig);
+            }
             Config storedConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configFile));
-
             return storedConfig;
         }
 
         public void SaveEntry(Entry entry)
         {
+            VerifyProgramDirectoriesExist();
             Config currentConfig = LoadConfig();
             try
             {
@@ -57,12 +64,22 @@ namespace VncAddressBook.Model
                     stringWriter.WriteLine("scale_den=" + entry.ScaleDen);
                     stringWriter.WriteLine("scale_num=" + entry.ScaleNum);
                     string vncText = stringWriter.ToString(); // Text to save in .vnc file
-                    File.WriteAllText(vncEntriesPath + entry.Name + ".vnc", vncText);
+                    File.WriteAllText(vncEntriesPath + entry.Name + @".vnc", vncText);
                 }
             }
             catch(Exception e)
             {
                 Console.WriteLine("Exception: SaveEntry() failed.", e.ToString());
+            }
+        }
+
+        public void DeleteEntry(Entry entry)
+        {
+            string entryPath = vncEntriesPath + entry.Name + @".vnc";
+
+            if (File.Exists(entryPath))
+            {
+                File.Delete(entryPath);
             }
         }
 
@@ -221,6 +238,22 @@ namespace VncAddressBook.Model
             }
 
             return realVncPath;
+        }
+
+        public void VerifyProgramDirectoriesExist()
+        {
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\XProduct\VNC Address Book\Configuration");
+        }
+
+        public void ShowMessageBox(string s, Action<bool> callback)
+        {
+            string message = s;
+            string caption = "VNC Address Book Message";
+            MessageBoxButton buttons = MessageBoxButton.OKCancel;
+            // Displays the MessageBox.
+            MessageBoxResult result = MessageBox.Show(message, caption, buttons, MessageBoxImage.Error);
+
+            callback(result == MessageBoxResult.OK);
         }
     }
 

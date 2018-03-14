@@ -14,5 +14,6 @@ namespace VncAddressBook.Model
         void SaveEntry(Entry entry);
         void DeleteEntry(Entry entry);
         void OpenVncViewer(Entry entry);
+        void ShowMessageBox(string s, Action<bool> callback);
     }
 }

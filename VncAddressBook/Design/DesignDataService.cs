@@ -22,6 +22,11 @@ namespace VncAddressBook.Design
             throw new NotImplementedException();
         }
 
+        public void DeleteEntry(Entry entry)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Entry> LoadEntries()
         {
             return new List<Entry>()
@@ -40,6 +45,11 @@ namespace VncAddressBook.Design
         }
 
         public void OpenVncViewer(Entry entry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowMessageBox(string s, Action<bool> callback)
         {
             throw new NotImplementedException();
         }
