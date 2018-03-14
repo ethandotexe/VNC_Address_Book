@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Linq;
 using System.Collections.ObjectModel;
@@ -37,7 +37,7 @@ namespace VncAddressBook.ViewModel
             AddEntryCommand = new RelayCommand(AddEntry);
             EditEntryCommand = new RelayCommand(EditEntry, () => SelectedEntry != null);
             SaveEntryCommand = new RelayCommand(SaveEntry);
-            DeleteEntryCommand = new RelayCommand(DeleteEntry);
+            DeleteEntryCommand = new RelayCommand(DeleteEntry, () => SelectedEntry != null);
             ConnectCommand = new RelayCommand(() => { DataService.OpenVncViewer(SelectedEntry); }, () => SelectedEntry != null);
 
             GetDesignData();
@@ -364,14 +364,15 @@ namespace VncAddressBook.ViewModel
 
         private void DeleteEntry()
         {
-            if (SelectedEntry != null)
+            Entry tempEntry = SelectedEntry;
+            if (tempEntry != null)
             {
                 DataService.ShowMessageBox("Are you sure you want to delete this entry? This cannot be undone.", (x) => 
                 {
                     if (x == true)
                     {
-                        Entries.Remove(SelectedEntry);
-                        DataService.DeleteEntry(SelectedEntry);
+                        Entries.Remove(tempEntry);
+                        DataService.DeleteEntry(tempEntry);
                     }
                     
                 });
